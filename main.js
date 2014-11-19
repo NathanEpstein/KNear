@@ -4,9 +4,17 @@ var dist = function(v1,v2){
   var sum = 0;
   v1.forEach(function(val,index){
     sum += Math.pow(val - v2[index],2);
-  })
+  });
   return Math.sqrt(sum);
-}
+};
+
+var updateMax = function(val,arr){
+    var max = 0;
+    arr.forEach(function(obj){
+        max = Math.max(max,obj.d);
+    });
+    return max;
+};
 
 
 var kNear = function(k){
@@ -18,43 +26,42 @@ var kNear = function(k){
 
   //add a point to the training set
   this.train = function(vector, label){
-    var obj = {v:vector, lab: label}
+    var obj = {v:vector, lab: label};
     training.push(obj);
-  }
+  };
 
   this.classify = function(v){
     var voteBloc = [];
     var maxD = 0;
     training.forEach(function(obj){
       var o = {d:dist(v,obj.v), vote:obj.lab};
-
       if (voteBloc.length < k){
-           console.log(voteBloc.length, k)
-        maxD = Math.max(maxD, o.d);
         voteBloc.push(o);
+        maxD = updateMax(maxD,voteBloc);
       }
       else {
         if (o.d < maxD){
           var bool = true;
           var count = 0;
           while (bool){
-            if (Number(training[count].d) === maxD){
-              training.splice(count,1,o);
+            if (Number(voteBloc[count].d) === maxD){
+              voteBloc.splice(count,1,o);
+              maxD = updateMax(maxD,voteBloc);
               bool = false;
             }
             else{
-              count++;
+              if(count < voteBloc.length-1){
+                count++;
+              }
+              else{
+                bool = false;
+              }
             }
           }
         }
       }
-    })
-    console.log(voteBloc);
-  }
-}
 
-var opt = new kNear(2);
-opt.train([0,0,0],'buy');
-opt.train([1,1,1],'buy');
-opt.train([10,0,10],'sell');
-opt.train([9,0,9],'sell');
+    });
+    console.log('final', voteBloc);
+  };
+};
