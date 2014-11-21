@@ -84,7 +84,6 @@ var kNear = module.exports.kNear = function(k){
     voteBloc.forEach(function(el){
       votes.push(el.vote);
     });
-    console.log(votes)
     return mode(votes);
   };
 };
