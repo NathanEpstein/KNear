@@ -1,6 +1,6 @@
 {
   "name": "knear",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Javascript implementation of the k nearest neighbors algorithm",
   "main": "main.js",
   "scripts": {
