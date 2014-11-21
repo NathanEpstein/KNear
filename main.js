@@ -1,3 +1,5 @@
+module.exports = {};
+
 //compute the euclidean distance between two vectors
 //function assumes vectors are arrays of equal length
 var dist = function(v1,v2){
@@ -16,30 +18,24 @@ var updateMax = function(val,arr){
     return max;
 };
 
-function mode(array)
-{
-    if(array.length === 0)
-      return null;
-    var modeMap = {};
-    var maxEl = array[0], maxCount = 1;
-    for(var i = 0; i < array.length; i++)
-    {
-      var el = array[i];
-      if(modeMap[el] === null)
-        modeMap[el] = 1;
-      else
-        modeMap[el]++;
-      if(modeMap[el] > maxCount)
-      {
-        maxEl = el;
-        maxCount = modeMap[el];
-      }
-    }
-    return maxEl;
+function mode(store){
+  var frequency = {};  // array of frequency.
+  var max = 0;  // holds the max frequency.
+  var result;   // holds the max frequency element.
+  for(var v in store) {
+          frequency[store[v]]=(frequency[store[v]] || 0)+1; // increment frequency.
+          if(frequency[store[v]] > max) { // is this frequency > max so far ?
+                  max = frequency[store[v]];  // update max.
+                  result = store[v];          // update result.
+          }
+  }
+    return result;
 }
 
 
-var kNear = function(k){
+
+
+var kNear = module.exports.kNear = function(k){
   //PRIVATE
   var training = [];
 
@@ -47,7 +43,7 @@ var kNear = function(k){
   //PUBLIC
 
   //add a point to the training set
-  this.train = function(vector, label){
+  this.learn = function(vector, label){
     var obj = {v:vector, lab: label};
     training.push(obj);
   };
@@ -88,6 +84,7 @@ var kNear = function(k){
     voteBloc.forEach(function(el){
       votes.push(el.vote);
     });
+    console.log(votes)
     return mode(votes);
   };
 };
